@@ -1,27 +1,19 @@
 import express, { Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes";
-import { Pool } from "pg";
 
 dotenv.config();
 
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ PostgreSQL connection setup using pg
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // e.g., "postgres://user:password@localhost:5432/dbname"
-});
-
-// Test DB connection
-pool
-  .connect()
-  .then(() => console.log("✅ Connected to PostgreSQL"))
-  .catch((err) => console.error("❌ PostgreSQL connection error", err));
-
-// Make pool accessible throughout your app (optional)
-export { pool };
+// ✅ MongoDB connection
+mongoose
+  .connect(process.env.MONGO_URI as string)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error", err));
 
 // Middleware
 app.use(cors());

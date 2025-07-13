@@ -3,11 +3,11 @@
     "target": "ES6",
     "module": "CommonJS",
     "outDir": "dist", // 👈 Output compiled files here
-    "rootDir": "src", // 👈 Entry point is in src/
+    "rootDir": "scripts/src", // 👈 Entry point is in src/
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src"],
+  "include": ["scripts/src"],
   "exclude": ["node_modules"]
 }
