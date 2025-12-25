@@ -6,6 +6,9 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db";
 import authRoutes from "./routes/auth.routes";
 import healthRoutes from "./routes/health.routes";
+import departmentRoutes from "./routes/department.routes";
+import subDepartmentRoutes from "./routes/subDepartment.routes";
+
 
 dotenv.config();
 connectDB();
@@ -25,7 +28,8 @@ app.use(cookieParser());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/health", healthRoutes);
-
+app.use("/api/departments", departmentRoutes);
+app.use("/api/sub-departments", subDepartmentRoutes);
 // Server
 const PORT = Number(process.env.PORT) || 5050;
 app.listen(PORT, () => {
