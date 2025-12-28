@@ -80,3 +80,42 @@ export const logout = (_: Request, res: Response) => {
 export const me = (req: Request, res: Response) => {
   res.json(req.user);
 };
+
+
+export const createUser = async (req: Request, res: Response) => {
+  try {
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    const { email, password, role } = req.body;
+
+    if (!email || !password || !role) {
+      return res.status(400).json({
+        message: "email, password and role are required",
+      });
+    }
+
+    const exists = await User.findOne({ email });
+    if (exists) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      email,
+      password: hashedPassword,
+      role,
+    });
+
+    res.status(201).json({
+      id: user._id,
+      email: user.email,
+      role: user.role,
+    });
+  } catch (error) {
+    console.error("CREATE USER ERROR:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

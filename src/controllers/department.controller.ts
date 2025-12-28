@@ -6,6 +6,11 @@ export const createDepartment = async (
   res: Response
 ) => {
   try {
+    // 🔐 ADMIN ONLY
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
     const { name, key } = req.body;
 
     if (!name || !key) {
