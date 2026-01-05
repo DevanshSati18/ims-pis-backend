@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.routes";
 import healthRoutes from "./routes/health.routes";
 import departmentRoutes from "./routes/department.routes";
 import subDepartmentRoutes from "./routes/subDepartment.routes";
+import inventoryRoutes from "./routes/inventory.routes";``
 
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/health", healthRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/sub-departments", subDepartmentRoutes);
+app.use("/api/inventory", inventoryRoutes);
 // Server
 const PORT = Number(process.env.PORT) || 5050;
 app.listen(PORT, () => {
