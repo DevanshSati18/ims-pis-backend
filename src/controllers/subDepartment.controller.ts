@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import SubDepartment from "../models/subDepartment.model";
 
+/**
+ * ADMIN: create sub-department
+ */
 export const createSubDepartment = async (
   req: Request,
   res: Response
@@ -32,6 +35,10 @@ export const createSubDepartment = async (
   }
 };
 
+/**
+ * ADMIN: sees all
+ * USER: sees only assigned sub-departments
+ */
 export const listSubDepartments = async (
   req: Request,
   res: Response
@@ -39,8 +46,34 @@ export const listSubDepartments = async (
   try {
     const { departmentKey } = req.params;
 
+    // 🟢 ADMIN → FULL ACCESS
+    if (req.user?.role === "admin") {
+      const subDepartments = await SubDepartment.find({
+        departmentKey,
+      }).sort({ name: 1 });
+
+      return res.json(subDepartments);
+    }
+
+    // 👤 USER → FILTERED ACCESS
+    const allowed = req.user?.visibleSubDepartments || [];
+
+    /**
+     * visibleSubDepartments format:
+     * ["fire:equipment", "electrical:panel"]
+     */
+    const allowedKeys = allowed
+      .filter((v) => v.startsWith(`${departmentKey}:`))
+      .map((v) => v.split(":")[1]);
+
+    // If user has no access, return empty array (NOT 403)
+    if (allowedKeys.length === 0) {
+      return res.json([]); 
+    }
+
     const subDepartments = await SubDepartment.find({
       departmentKey,
+      key: { $in: allowedKeys },
     }).sort({ name: 1 });
 
     res.json(subDepartments);

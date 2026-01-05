@@ -6,6 +6,7 @@ declare global {
       user?: {
         id: string;
         role: IUser["role"];
+        visibleSubDepartments?: string[];
       };
     }
   }
