@@ -1,0 +1,50 @@
+[{
+  "_id": {
+    "$oid": "694d537cb656f1695e7b7892"
+  },
+  "departmentKey": "fire",
+  "name": "Equipment",
+  "key": "equipment",
+  "createdAt": {
+    "$date": "2025-12-25T15:08:44.987Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-25T15:08:44.987Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "695b90bd589be83acf2332f6"
+  },
+  "departmentKey": "fire",
+  "key": "noc",
+  "name": "Fire NOC",
+  "fields": [
+    {
+      "key": "nocNumber",
+      "label": "NOC Number",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "expiryDate",
+      "label": "Expiry Date",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "certificate",
+      "label": "NOC Certificate",
+      "type": "file",
+      "required": true
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-05T10:21:49.403Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T10:21:49.403Z"
+  },
+  "__v": 0
+}]

@@ -33,6 +33,8 @@ app.use("/api/departments", departmentRoutes);
 app.use("/api/sub-departments", subDepartmentRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/records", recordRoutes);
+app.use("/api/uploads",express.static("src/uploads"));
+
 // Server
 const PORT = Number(process.env.PORT) || 5050;
 app.listen(PORT, () => {

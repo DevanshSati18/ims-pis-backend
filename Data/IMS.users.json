@@ -1,0 +1,64 @@
+[{
+  "_id": {
+    "$oid": "6947d768c7d1af462f88ff2a"
+  },
+  "email": "debug@test.com",
+  "password": "test123",
+  "role": "admin",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6947db57c7d1af462f88ff2c"
+  },
+  "name": "Admin",
+  "email": "admin@test.com",
+  "password": "$2b$10$yP0fRsH0Vk.KK8mzf8eY7OeQ1dVt35B2nlPnmt6L22IY7Pso4Pha2",
+  "role": "admin",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "694d617e7468d9ad9fe3611a"
+  },
+  "email": "user@test.com",
+  "password": "$2b$10$.q7./0SHQY6AmSmUkCC5u.Hj/2fgQ1pMGkR1BFyaxrmswdWEHJ1Zm",
+  "role": "user",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6958e7b21f8a8b99229c6949"
+  },
+  "email": "fireuser2@test.com",
+  "password": "$2b$10$2oz22v68WNDns1zP8ECD/ORjzv8Wc1kn3G6xtqb7JaVR1g.DLNs.6",
+  "role": "user",
+  "visibleSubDepartments": [
+    "fire:equipment"
+  ],
+  "createdAt": {
+    "$date": "2026-01-03T09:56:02.796Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-03T09:56:02.796Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6958ea371f8a8b99229c694c"
+  },
+  "email": "fireuser@test.com",
+  "password": "$2b$10$7o/zTlLsicsB83XYSdkK5OZDmV0GILhMAJlyVKiwoTad6a92tiQI6",
+  "role": "user",
+  "visibleSubDepartments": [
+    "fire:equipment"
+  ],
+  "createdAt": {
+    "$date": "2026-01-03T10:06:47.004Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-03T10:06:47.004Z"
+  },
+  "__v": 0
+}]
