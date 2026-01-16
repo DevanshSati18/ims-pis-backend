@@ -5,7 +5,7 @@ declare global {
     interface Request {
       user?: {
         id: string;
-        role: IUser["role"];
+        role: "admin" | "user";
         visibleSubDepartments?: string[];
       };
     }

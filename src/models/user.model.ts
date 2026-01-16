@@ -1,40 +1,39 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-export interface IUser {
-  name: string;
+export interface IUser extends Document {
   email: string;
   password: string;
   role: "admin" | "user";
-  visibleSubDepartments: string[]; // e.g. ["fire:equipment"]
+  visibleSubDepartments: string[];
+  isActive: boolean;
 }
 
-const userSchema = new mongoose.Schema<IUser>(
+const UserSchema = new Schema<IUser>(
   {
     email: {
       type: String,
       required: true,
       unique: true,
     },
-
     password: {
       type: String,
       required: true,
-      select: false,
     },
-
     role: {
       type: String,
       enum: ["admin", "user"],
-      default: "user",
+      required: true,
     },
-
-    // 🔐 VISIBILITY RULES
     visibleSubDepartments: {
       type: [String],
       default: [],
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }
 );
 
-export default mongoose.model<IUser>("User", userSchema);
+export default mongoose.model<IUser>("User", UserSchema);

@@ -10,6 +10,7 @@ import departmentRoutes from "./routes/department.routes";
 import subDepartmentRoutes from "./routes/subDepartment.routes";
 import inventoryRoutes from "./routes/inventory.routes";
 import recordRoutes from "./routes/record.routes";
+import userRoutes from "./routes/user.routes";
 
 dotenv.config();
 connectDB();
@@ -34,6 +35,7 @@ app.use("/api/sub-departments", subDepartmentRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/records", recordRoutes);
 app.use("/api/uploads",express.static("src/uploads"));
+app.use("/api/users", userRoutes);
 
 // Server
 const PORT = Number(process.env.PORT) || 5050;
