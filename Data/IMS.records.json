@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "695b932c1ded4af58d7d6463"
+  },
+  "departmentKey": "fire",
+  "subDepartmentKey": "noc",
+  "title": "Fire NOC 2024",
+  "data": {
+    "nocNumber": "NOC-2024-019",
+    "expiryDate": "2026-05-01"
+  },
+  "createdBy": {
+    "$oid": "6947db57c7d1af462f88ff2c"
+  },
+  "createdAt": {
+    "$date": "2026-01-05T10:32:12.202Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T10:32:12.202Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,28 @@
+[{
+  "_id": {
+    "$oid": "694d522322c3ffd0831a651a"
+  },
+  "name": "Fire",
+  "key": "fire",
+  "createdAt": {
+    "$date": "2025-12-25T15:02:59.933Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-25T15:02:59.933Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "694d5fafe1225287bfcf13de"
+  },
+  "name": "Electrical",
+  "key": "electrical",
+  "createdAt": {
+    "$date": "2025-12-25T16:00:47.908Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-25T16:00:47.908Z"
+  },
+  "__v": 0
+}]
