@@ -6,6 +6,8 @@ export interface IUser extends Document {
   role: "admin" | "user";
   visibleSubDepartments: string[];
   isActive: boolean;
+  name : string,
+  mobile : number
 }
 
 const UserSchema = new Schema<IUser>(
@@ -32,6 +34,14 @@ const UserSchema = new Schema<IUser>(
       type: Boolean,
       default: true,
     },
+    name : {
+      type : String,
+      required : true
+    },
+    mobile : {
+      type : Number,
+      required : true
+    }
   },
   { timestamps: true }
 );

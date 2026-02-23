@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model";
+import rateLimit from "express-rate-limit";
 
 export const protect = async (
   req: Request,
@@ -41,3 +42,8 @@ export const protect = async (
     return res.status(401).json({ message: "Invalid token" });
   }
 };
+export const authLimiter = rateLimit({
+  windowMs : 15*60*60,
+  max : 5,
+  message : 'Too many login attempts. Try again later'
+})

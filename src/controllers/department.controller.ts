@@ -40,3 +40,27 @@ export const listDepartments = async (
     res.status(500).json({ message: "Internal server error" });
   }
 };
+export const deleteDepartment = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    // 🔐 ADMIN ONLY
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    const { id } = req.params;
+
+    const department = await Department.findByIdAndDelete(id);
+
+    if (!department) {
+      return res.status(404).json({ message: "Department not found" });
+    }
+
+    res.json({ message: "Department deleted successfully", id });
+  } catch (error) {
+    console.error("DELETE DEPARTMENT ERROR:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

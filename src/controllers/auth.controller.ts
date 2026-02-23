@@ -2,20 +2,19 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model";
+import { error } from "console";
 
 const createToken = (id: string, role: string) => {
-  return jwt.sign(
-    { id, role },
-    process.env.JWT_SECRET as string,
-    { expiresIn: "1d" }
-  );
+  return jwt.sign({ id, role }, process.env.JWT_SECRET as string, {
+    expiresIn: "1d",
+  });
 };
 
 export const registerAdmin = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, mobile } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || !name || !mobile) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -23,6 +22,7 @@ export const registerAdmin = async (req: Request, res: Response) => {
 
     await User.create({
       name,
+      mobile,
       email,
       password: hashedPassword,
       role: "admin",
@@ -31,7 +31,8 @@ export const registerAdmin = async (req: Request, res: Response) => {
     res.status(201).json({ message: "Admin created successfully" });
   } catch {
     // Do NOT expose internal error details
-    res.status(500).json({ message: 'Internal server error' });
+
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -68,7 +69,7 @@ export const login = async (req: Request, res: Response) => {
       role: user.role,
     });
   } catch {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -83,11 +84,9 @@ export const logout = (_req: Request, res: Response) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-
 export const me = (req: Request, res: Response) => {
   res.json(req.user);
 };
-
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -96,12 +95,7 @@ export const createUser = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Admin access required" });
     }
 
-    const {
-      email,
-      password,
-      role,
-      visibleSubDepartments,
-    } = req.body;
+    const { email, password, role, visibleSubDepartments } = req.body;
 
     // 🔍 Basic validation
     if (!email || !password || !role) {
