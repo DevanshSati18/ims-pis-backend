@@ -6,11 +6,13 @@ import {
     resetPassword,
     updatePermissions,
     updateUserStatus,
+    changeOwnPassword
 } from "../controllers/user.controller";
 import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
 
+router.put("/change-password", protect, changeOwnPassword);
 // 🔐 ADMIN ONLY
 router.get("/", protect, listUsers);
 router.get("/:id", protect, getUserById);

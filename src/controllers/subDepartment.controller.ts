@@ -144,4 +144,34 @@ export const updateSubDepartment = async (
     console.error("UPDATE SUB-DEPT ERROR:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+  
+};
+export const deleteSubDepartment = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "admin") {
+            return res.status(403).json({ message: "Admin access required" });
+        }
+
+        // 1. Extract both keys from the URL
+        const { departmentKey, key } = req.params;
+
+        // 2. Find and delete using BOTH keys to ensure accuracy
+        const deletedSubDept = await SubDepartment.findOneAndDelete({ 
+            departmentKey: departmentKey, 
+            key: key 
+        });
+
+        if (!deletedSubDept) {
+            return res.status(404).json({ message: "Sub-Department not found" });
+        }
+
+        // Optional: Cascade delete records that belonged to this sub-department
+        // await Record.deleteMany({ subDepartmentKey: key, departmentKey: departmentKey });
+
+        res.json({ message: "Sub-Department deleted successfully", key });
+
+    } catch (error) {
+        console.error("DELETE SUB-DEPARTMENT ERROR:", error);
+        res.status(500).json({ message: "Server error while deleting sub-department" });
+    }
 };

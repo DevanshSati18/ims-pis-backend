@@ -67,6 +67,9 @@ export const login = async (req: Request, res: Response) => {
       id: user._id,
       email: user.email,
       role: user.role,
+      name:user.name,
+      mobile:user.mobile,
+      visibleSubDepartments : user.visibleSubDepartments
     });
   } catch {
     res.status(500).json({ message: "Internal server error" });
@@ -128,6 +131,8 @@ export const createUser = async (req: Request, res: Response) => {
       id: user._id,
       email: user.email,
       role: user.role,
+      name:user.name,
+      mobile:user.mobile,
       visibleSubDepartments: user.visibleSubDepartments,
     });
   } catch (error) {

@@ -39,28 +39,34 @@ export const listDepartments = async (
     console.error("LIST DEPARTMENTS ERROR:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-};
-export const deleteDepartment = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    // 🔐 ADMIN ONLY
-    if (!req.user || req.user.role !== "admin") {
-      return res.status(403).json({ message: "Admin access required" });
+};/* DELETE DEPARTMENT */
+export const deleteDepartment = async (req: Request, res: Response) => {
+    try {
+        if (req.user?.role !== "admin") {
+            return res.status(403).json({ message: "Admin access required" });
+        }
+
+        // 1. Grab the "key" (e.g. "hospital") from the URL parameters
+        // Note: Even if your route says '/:id', req.params.id will hold "hospital"
+        const departmentKey = req.params.id; 
+
+        // 2. Find and delete using 'key' instead of '_id'
+        const deletedDepartment = await Department.findOneAndDelete({ key: departmentKey });
+
+        if (!deletedDepartment) {
+            return res.status(404).json({ message: "Department not found" });
+        }
+
+        // OPTIONAL BUT RECOMMENDED: 
+        // If you have a SubDepartment model, you might want to delete all sub-departments 
+        // that belong to this department so they don't become "orphaned" in your database.
+        // await SubDepartment.deleteMany({ departmentKey: departmentKey });
+        // await Record.deleteMany({ departmentKey: departmentKey });
+
+        res.json({ message: "Department deleted successfully", key: departmentKey });
+
+    } catch (error) {
+        console.error("DELETE DEPARTMENT ERROR:", error);
+        res.status(500).json({ message: "Server error while deleting department" });
     }
-
-    const { id } = req.params;
-
-    const department = await Department.findByIdAndDelete(id);
-
-    if (!department) {
-      return res.status(404).json({ message: "Department not found" });
-    }
-
-    res.json({ message: "Department deleted successfully", id });
-  } catch (error) {
-    console.error("DELETE DEPARTMENT ERROR:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
 };

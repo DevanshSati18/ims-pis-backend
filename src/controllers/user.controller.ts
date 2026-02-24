@@ -8,8 +8,9 @@ export const listUsers = async (req: Request, res: Response) => {
         return res.status(403).json({ message: "Admin access required" });
     }
 
+    // Retrieves mobile along with other fields
     const users = await User.find().select(
-        "_id email role visibleSubDepartments isActive"
+        "_id email role mobile visibleSubDepartments isActive"
     );
 
     res.json(
@@ -17,6 +18,7 @@ export const listUsers = async (req: Request, res: Response) => {
             id: u._id,
             email: u.email,
             role: u.role,
+            mobile: u.mobile, // Maps it to frontend
             visibleSubDepartments: u.visibleSubDepartments || [],
             isActive: u.isActive !== false,
         }))
@@ -28,8 +30,9 @@ export const getUserById = async (
     req: Request,
     res: Response
 ) => {
-    if (req.user?.role !== "admin") {
-        return res.status(403).json({ message: "Admin access required" });
+    // Allows admins OR the user requesting their own profile
+    if (req.user?.role !== "admin" && req.user?.id !== req.params.id) {
+        return res.status(403).json({ message: "Not authorized to view this profile" });
     }
 
     const user = await User.findById(req.params.id);
@@ -42,11 +45,13 @@ export const getUserById = async (
         id: user._id,
         email: user.email,
         role: user.role,
+        mobile: user.mobile, // Included in single fetch
         visibleSubDepartments: user.visibleSubDepartments || [],
         isActive: user.isActive !== false,
     });
 };
 
+/* CREATE USER */
 /* CREATE USER */
 export const createUser = async (
     req: Request,
@@ -56,11 +61,13 @@ export const createUser = async (
         return res.status(403).json({ message: "Admin access required" });
     }
 
-    const { email, password, role } = req.body;
+    // EXTRACT NAME ALONG WITH OTHERS
+    const { name, email, password, role, mobile } = req.body;
 
-    if (!email || !password || !role) {
+    // VALIDATE NAME IS INCLUDED
+    if (!name || !email || !password || !role || !mobile) {
         return res.status(400).json({
-            message: "email, password and role are required",
+            message: "Name, email, password, role, and mobile are required",
         });
     }
 
@@ -72,16 +79,20 @@ export const createUser = async (
     const hashed = await bcrypt.hash(password, 10);
 
     const user = await User.create({
+        name,      // SAVE NAME
         email,
         password: hashed,
         role,
+        mobile,    // SAVE MOBILE
         visibleSubDepartments: [],
     });
 
     res.status(201).json({
         id: user._id,
+        name: user.name, // SEND NAME BACK
         email: user.email,
         role: user.role,
+        mobile: user.mobile,
     });
 };
 
@@ -138,4 +149,31 @@ export const updateUserStatus = async (
     });
 
     res.json({ message: "User status updated" });
+};
+/* USER CAN CHANGE THEIR OWN PASSWORD */
+export const changeOwnPassword = async (req: Request, res: Response) => {
+    try {
+        // req.user comes from the protect middleware
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        const { newPassword } = req.body;
+
+        if (!newPassword || newPassword.length < 6) {
+            return res.status(400).json({ message: "Password must be at least 6 characters long." });
+        }
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+
+        // Update the password for the currently logged-in user
+        await User.findByIdAndUpdate(req.user.id, {
+            password: hashed,
+        });
+
+        res.json({ message: "Password updated successfully" });
+    } catch (error) {
+        console.error("Error changing password:", error);
+        res.status(500).json({ message: "Server error while changing password" });
+    }
 };

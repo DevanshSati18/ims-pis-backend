@@ -1,4 +1,5 @@
 "use strict";
+import path from "path"; // 👈 Add this import at the top
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -43,7 +44,7 @@ app.use((0, cookie_parser_1.default)());
 app.use((0, helmet_1.default)({
     crossOriginResourcePolicy: { policy: "cross-origin" },
 }));
-app.use(rateLimiter_1.globalLimiter);
+// app.use(rateLimiter_1.globalLimiter);
 // Routes
 app.use("/api/auth", auth_routes_1.default);
 app.use("/api/health", health_routes_1.default);
@@ -52,6 +53,7 @@ app.use("/api/sub-departments", subDepartment_routes_1.default);
 app.use("/api/inventory", inventory_routes_1.default);
 app.use("/api/records", record_routes_1.default);
 app.use("/api/uploads", express_1.default.static("src/uploads"));
+app.use("/api/uploads", express.static(path.join(process.cwd(), "src/uploads")));
 app.use("/api/users", user_routes_1.default);
 // Server
 const PORT = Number(process.env.PORT) || 5050;
