@@ -1,3 +1,7 @@
 docker rm -f ims-backend
-
+docker build -t ims-backend .
 docker rm -f ims-backend && docker run -d --name ims-backend -p 5000:5000 --env-file .env.docker -v "D:/IMS_DATA/uploads:/app/uploads" --restart unless-stopped ims-backend
+
+docker rm -f ims-backend 2>$null; docker build -t ims-backend .; docker run -d --name ims-backend -p 5000:5000 --env-file .env.docker -v "D:/IMS_DATA/uploads:/app/uploads" --restart unless-stopped ims-backend
+
+docker rm -f ims-backend 2>$null; docker build -t ims-backend .; docker run -d --name ims-backend -p 5000:5000 --env-file .env.docker -e UPLOAD_PATH="/app/uploads" -v "D:/IMS_DATA/uploads:/app/uploads" --restart unless-stopped ims-backend
