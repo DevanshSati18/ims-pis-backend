@@ -7,6 +7,7 @@ export interface IRecordDocument {
   mimeType: string;
   size: number;
   uploadedAt: Date;
+  url?: string;
 }
 
 export interface IRecord {
@@ -28,6 +29,7 @@ const documentSchema = new mongoose.Schema<IRecordDocument>(
     mimeType: { type: String, required: true },
     size: { type: Number, required: true },
     uploadedAt: { type: Date, default: Date.now },
+    url: { type: String, required: false },
   },
   { _id: false }
 );

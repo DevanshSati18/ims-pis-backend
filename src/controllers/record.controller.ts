@@ -479,16 +479,22 @@ export const uploadRecordDocuments = async (req: any, res: Response) => {
     const files = req.files as Express.Multer.File[];
     if (!files || files.length === 0) return res.status(400).json({ message: "No files uploaded" });
 
-    const attachments = files.map((file) => ({
-      fieldKey,
-      originalName: file.originalname,
-      fileName: file.filename,
-      mimeType: file.mimetype,
-      size: file.size,
-      uploadedAt: new Date(),
-    }));
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-    // Update documents with $push to avoid full-document required validation (data field). 
+    const attachments = files.map((file) => {
+      const fileUrl = `${baseUrl}/uploads/${file.filename}`;
+      return {
+        fieldKey,
+        originalName: file.originalname,
+        fileName: file.filename,
+        mimeType: file.mimetype,
+        size: file.size,
+        uploadedAt: new Date(),
+        url: fileUrl,
+      };
+    });
+
+    // Update documents with $push to avoid full-document required validation (data field).
     const updatedRecord = await Record.findByIdAndUpdate(
       id,
       { $push: { documents: { $each: attachments } } },
