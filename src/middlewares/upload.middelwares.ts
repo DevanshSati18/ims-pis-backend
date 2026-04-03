@@ -1,8 +1,9 @@
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { UPLOAD_PATH } from "../config/storage";
 
-const uploadDir = path.join(process.cwd(), "src/uploads");
+const uploadDir = UPLOAD_PATH;
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });

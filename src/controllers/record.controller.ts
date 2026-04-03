@@ -356,6 +356,7 @@ import Record from "../models/record.model";
 import SubDepartment from "../models/subDepartment.model";
 import fs from "fs";
 import path from "path";
+import { UPLOAD_PATH } from "../config/storage";
 
 /**
  * CREATE RECORD
@@ -478,19 +479,27 @@ export const uploadRecordDocuments = async (req: any, res: Response) => {
     const files = req.files as Express.Multer.File[];
     if (!files || files.length === 0) return res.status(400).json({ message: "No files uploaded" });
 
-    for (const file of files) {
-      record.documents.push({
-        fieldKey,
-        originalName: file.originalname,
-        fileName: file.filename,
-        mimeType: file.mimetype,
-        size: file.size,
-        uploadedAt: new Date(),
-      });
+    const attachments = files.map((file) => ({
+      fieldKey,
+      originalName: file.originalname,
+      fileName: file.filename,
+      mimeType: file.mimetype,
+      size: file.size,
+      uploadedAt: new Date(),
+    }));
+
+    // Update documents with $push to avoid full-document required validation (data field). 
+    const updatedRecord = await Record.findByIdAndUpdate(
+      id,
+      { $push: { documents: { $each: attachments } } },
+      { new: true }
+    );
+
+    if (!updatedRecord) {
+      return res.status(404).json({ message: "Record not found" });
     }
 
-    await record.save();
-    res.json(record);
+    res.json(updatedRecord);
   } catch (error) {
     console.error("UPLOAD DOCUMENT ERROR:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -555,7 +564,7 @@ export const deleteRecord = async (req: Request, res: Response) => {
 
     if (record.documents && record.documents.length > 0) {
       for (const doc of record.documents) {
-        const filePath = path.join(process.cwd(), "src/uploads", doc.fileName);
+        const filePath = path.join(UPLOAD_PATH, doc.fileName);
         fs.unlink(filePath, (err) => {
           if (err && err.code !== 'ENOENT') console.error(`Failed to delete file: ${filePath}`, err);
         });
